@@ -3,5 +3,13 @@
     "*.module.ts": "nest",
     "*.service.ts": "nest-service",
     "*.controller.ts": "nest-controller"
-  }
+  },
+  "workbench.colorCustomizations": {
+    "commandCenter.border": "#e7e7e799",
+    "titleBar.activeBackground": "#af1937e1",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#af193799",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#af1937e1"
 }
