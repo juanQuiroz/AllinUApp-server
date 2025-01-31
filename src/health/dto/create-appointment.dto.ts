@@ -16,14 +16,6 @@ export class CreateAppointmentDto {
 
   @IsString()
   @Transform(({ value }) => value.trim())
-  attendedBy: string;
-
-  @IsString()
-  @Transform(({ value }) => value.trim())
-  spo2: string;
-
-  @IsString()
-  @Transform(({ value }) => value.trim())
   breathingRate: string;
 
   @IsString()

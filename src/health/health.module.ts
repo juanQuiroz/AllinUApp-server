@@ -28,7 +28,7 @@ import { AppointmentPrescriptions } from './entities/appointments-prescriptions.
 import { AppointmentCie10 } from './entities/appointments-cie.entity';
 import { Prescription } from './entities/prescriptions.entity';
 import { Student } from 'src/shared/entities/students.entity';
-import { OutPatientsService } from 'src/shared/services/out-patients.service';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -45,6 +45,7 @@ import { OutPatientsService } from 'src/shared/services/out-patients.service';
       Prescription,
       Student,
     ]),
+    UsersModule,
   ],
   controllers: [
     PhysicalExamController,

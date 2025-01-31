@@ -10,7 +10,6 @@ import { Student } from './entities/students.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import { OutPatient } from './entities/out-patients.entity';
 import { AdminStaff } from './entities/admin-staff.entity';
-import { PatientsService } from 'src/health/services/patients.service';
 import { HealthModule } from 'src/health/health.module';
 
 @Module({
@@ -19,7 +18,7 @@ import { HealthModule } from 'src/health/health.module';
     MulterModule.register({
       dest: './uploads',
     }),
-    HealthModule, // Importa HealthModule para acceder a PatientsService
+    HealthModule,
   ],
   controllers: [
     StudentsController,
