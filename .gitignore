@@ -37,4 +37,10 @@ lerna-debug.log*
 # DB
 /postgres
 
-postgres
+postgres/*
+
+postgres/data/
+
+pgdata/
+postgresql/
+postgres/
