@@ -1,6 +1,14 @@
-import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { CreateDateColumn } from 'typeorm';
+import { CreatePrescriptionDto } from './create-prescription.dto';
 
 export class CreateAppointmentDto {
   @IsOptional()
@@ -89,4 +97,10 @@ export class CreateAppointmentDto {
   @IsUUID()
   @IsOptional()
   clinicalRecordId?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePrescriptionDto)
+  prescriptions?: CreatePrescriptionDto[];
 }

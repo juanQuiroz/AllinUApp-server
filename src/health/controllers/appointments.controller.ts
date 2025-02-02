@@ -22,6 +22,23 @@ import { UserActiveInterface } from 'src/common/interfaces/user-active.interface
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
+  // @Post()
+  // @Auth(Role.ADMIN)
+  // @HttpCode(HttpStatus.CREATED)
+  // async create(
+  //   @Body() createAppointmentDto: CreateAppointmentDto,
+  //   @ActiveUser() user: UserActiveInterface,
+  // ) {
+  //   const appointment = await this.appointmentsService.create(
+  //     createAppointmentDto,
+  //     user,
+  //   );
+  //   return {
+  //     message: 'Appointment successfully created',
+  //     data: appointment,
+  //   };
+  // }
+
   @Post()
   @Auth(Role.ADMIN)
   @HttpCode(HttpStatus.CREATED)

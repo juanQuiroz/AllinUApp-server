@@ -19,7 +19,6 @@ export class CreatePrescriptionDto {
   dosageForm: string;
 
   @IsNumber({ maxDecimalPlaces: 2 })
-  @Transform(({ value }) => value.trim())
   quantity: number;
 
   @IsString()

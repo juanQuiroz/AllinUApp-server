@@ -109,6 +109,8 @@ export class ClinicalRecordsService {
         'patient.student',
         'patient.adminStaff',
         'patient.outPatient',
+        'appointments',
+        'physicalExam',
       ],
     });
 
