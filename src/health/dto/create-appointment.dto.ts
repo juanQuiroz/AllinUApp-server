@@ -100,6 +100,11 @@ export class CreateAppointmentDto {
 
   @IsOptional()
   @IsArray()
+  @IsUUID('all', { each: true })
+  diagnosis: string[];
+
+  @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreatePrescriptionDto)
   prescriptions?: CreatePrescriptionDto[];

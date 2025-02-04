@@ -11,6 +11,7 @@ import { UpdateAppointmentDto } from '../dto/update-appointment.dto';
 import { User } from 'src/users/entities/user.entity';
 import { Prescription } from '../entities/prescriptions.entity';
 import { AppointmentPrescriptions } from '../entities/appointments-prescriptions.entity';
+import { AppointmentCie10 } from '../entities/appointments-cie.entity';
 
 @Injectable()
 export class AppointmentsService {
@@ -26,6 +27,9 @@ export class AppointmentsService {
 
     @InjectRepository(AppointmentPrescriptions)
     private readonly appointmentPrescriptionsRepository: Repository<AppointmentPrescriptions>,
+
+    @InjectRepository(AppointmentCie10)
+    private readonly appointmentCie10Repository: Repository<AppointmentCie10>,
   ) {}
 
   // async create(
@@ -56,7 +60,7 @@ export class AppointmentsService {
     createAppointmentDto: CreateAppointmentDto,
     user: { email: string },
   ): Promise<Appointment> {
-    const { clinicalRecordId, prescriptions, ...appointmentData } =
+    const { clinicalRecordId, prescriptions, diagnosis, ...appointmentData } =
       createAppointmentDto;
 
     // Buscar el usuario autenticado
@@ -78,6 +82,18 @@ export class AppointmentsService {
     // Guardar la cita
     const savedAppointment =
       await this.appointmentsRepository.save(appointment);
+
+    // 📌 ✅ Insertar en la tabla pivote usando solo los UUIDs sin buscar en la BD
+    if (diagnosis && diagnosis.length > 0) {
+      const appointmentCie10Records = diagnosis.map((cie10Id) =>
+        this.appointmentCie10Repository.create({
+          appointment: { id: savedAppointment.id }, // Solo pasamos el ID
+          cie10: { id: cie10Id }, // Solo pasamos el ID
+        }),
+      );
+
+      await this.appointmentCie10Repository.save(appointmentCie10Records);
+    }
 
     // Procesar las prescripciones si existen
     if (prescriptions && prescriptions.length > 0) {
@@ -121,6 +137,7 @@ export class AppointmentsService {
         'clinicalRecord',
         'attendedBy',
         'appointmentPrescriptions.prescription',
+        'appointmentCie10.cie10',
       ],
     });
 
