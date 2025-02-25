@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { OutPatientsService } from '../services/out-patients.service';
 import { CreateOutPatientDto } from '../dto/create-outPatient.dto';
+import { UpdateOutPatientDto } from '../dto/update-outPatient.dto';
 
 @Controller('out-patients')
 export class OutPatientsController {
@@ -41,5 +50,13 @@ export class OutPatientsController {
       message: 'All out patients retrieved successfully',
       data: outPatient,
     };
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateOutPatientDto: UpdateOutPatientDto,
+  ) {
+    return this.outPatientsService.update(id, updateOutPatientDto);
   }
 }

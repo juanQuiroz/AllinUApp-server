@@ -32,7 +32,7 @@ export class AdminStaff {
     enum: Gender,
     nullable: true,
   })
-  @IsEnum(Gender, { message: 'gender must be "MASCULINO" or "FEMENINO"' })
+  @IsEnum(Gender, { message: 'gender must be only "MASCULINO" or "FEMENINO"' })
   gender: string;
 
   @Column({ nullable: true })

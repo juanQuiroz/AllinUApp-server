@@ -10,6 +10,8 @@ import {
 import { ClinicalRecordsService } from '../services/clinical-records.service';
 import { CreateClinicalRecordDto } from '../dto/create-clinicalRecord.dto';
 import { ClinicalRecord } from '../entities/clinical-records.entity';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Role } from 'src/common/enums/rol.enum';
 
 @Controller('clinical-records')
 export class ClinicalRecordsController {
@@ -18,6 +20,7 @@ export class ClinicalRecordsController {
   ) {}
 
   @Post()
+  @Auth(Role.ADMIN)
   async create(
     @Body() createClinicalRecordDto: CreateClinicalRecordDto,
   ): Promise<ClinicalRecord> {
@@ -31,6 +34,7 @@ export class ClinicalRecordsController {
   }
 
   @Get()
+  @Auth(Role.ADMIN)
   async findAll() {
     const patients = await this.clinicalRecordsService.findAll();
     return {
@@ -40,6 +44,7 @@ export class ClinicalRecordsController {
   }
 
   @Get(':id')
+  @Auth(Role.ADMIN)
   async findOne(@Param('id') id: string): Promise<ClinicalRecord> {
     const clinicalRecord = await this.clinicalRecordsService.findOne(id);
 

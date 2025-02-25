@@ -94,13 +94,24 @@ export class OutPatientsService {
    * @param updateOutPatientDto Datos a actualizar
    * @returns El paciente actualizado
    */
+
   async update(
     id: string,
-    updateOutPatientDto: UpdateOutPatientDto,
+    updateStudentDto: UpdateOutPatientDto,
   ): Promise<OutPatient> {
-    const outPatient = await this.findOne(id);
-    this.outPatientRepository.merge(outPatient, updateOutPatientDto);
-    return this.outPatientRepository.save(outPatient);
+    // Buscar al estudiante por su ID
+    const adminStaff = await this.outPatientRepository.findOne({
+      where: { id },
+    });
+
+    if (!adminStaff) {
+      throw new NotFoundException(
+        `No se encontró un paciente externo con el ID: ${id}`,
+      );
+    }
+
+    const updatedStudent = Object.assign(adminStaff, updateStudentDto);
+    return this.outPatientRepository.save(updatedStudent);
   }
 
   /**

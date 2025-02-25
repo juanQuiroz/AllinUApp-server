@@ -148,12 +148,10 @@ export class StudentsService {
       );
     }
 
-    // Actualizar el estudiante
     const updatedStudent = Object.assign(student, updateStudentDto);
     return this.studentRepository.save(updatedStudent);
   }
 
-  // Eliminar estudiante (soft delete)
   async remove(id: string): Promise<void> {
     const student = await this.findOne(id);
     await this.studentRepository.softRemove(student); // Marca como eliminado sin borrar de la base de datos

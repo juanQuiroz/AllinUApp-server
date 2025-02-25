@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateOutPatientDto {
   id: string;
@@ -20,8 +20,8 @@ export class CreateOutPatientDto {
   @Transform(({ value }) => value.trim())
   docId: string;
 
-  @IsString()
-  @Transform(({ value }) => value.trim())
+  @Transform(({ value }) => value?.trim() ?? value)
+  @IsOptional()
   gender: string;
 
   @IsString()

@@ -57,7 +57,7 @@ export class AppointmentsController {
   }
 
   @Get()
-  // @Auth(Role.ADMIN)
+  @Auth(Role.ADMIN)
   @HttpCode(HttpStatus.OK)
   async findAll() {
     const appointments = await this.appointmentsService.findAll();

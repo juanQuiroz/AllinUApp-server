@@ -5,33 +5,42 @@ export class CreateStudentDto {
   id: string;
 
   @Transform(({ value }) => value.trim())
+  @IsOptional()
   firstName: string;
 
   @Transform(({ value }) => value.trim())
+  @IsOptional()
   lastName: string;
 
   @Transform(({ value }) => value.trim())
+  @IsOptional()
   motherLastName: string;
 
   @Transform(({ value }) => value.trim())
+  @IsOptional()
   docId: string;
 
   @Transform(({ value }) => value.trim())
+  @IsOptional()
   studentCode: string;
 
-  @Transform(({ value }) => value.trim())
+  @Transform(({ value }) => value?.trim() ?? value)
+  @IsOptional()
   gender: string;
 
   @Transform(({ value }) => value.trim())
+  @IsOptional()
   phone: string;
 
   @Transform(({ value }) => value.trim())
+  @IsOptional()
   bornDate: Date;
 
-  @Transform(({ value }) => value.trim())
-  admissionYear: string;
+  @IsOptional()
+  admissionYear: Date;
 
   @Transform(({ value }) => value.trim())
+  @IsOptional()
   address: string;
 
   @Transform(({ value }) => value.trim())
