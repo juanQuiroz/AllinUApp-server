@@ -5,10 +5,14 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseUUIDPipe,
+  Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ClinicalRecordsService } from '../services/clinical-records.service';
 import { CreateClinicalRecordDto } from '../dto/create-clinicalRecord.dto';
+import { UpdateClinicalRecordDto } from '../dto/update-clinicalRecord.dto';
 import { ClinicalRecord } from '../entities/clinical-records.entity';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/rol.enum';
@@ -25,10 +29,8 @@ export class ClinicalRecordsController {
     @Body() createClinicalRecordDto: CreateClinicalRecordDto,
   ): Promise<ClinicalRecord> {
     try {
-      // Llamada al servicio para crear el registro clínico
       return await this.clinicalRecordsService.create(createClinicalRecordDto);
     } catch (error) {
-      // Manejo de errores
       throw new BadRequestException(error.message);
     }
   }
@@ -53,5 +55,23 @@ export class ClinicalRecordsController {
     }
 
     return clinicalRecord;
+  }
+
+  @Patch(':id')
+  @Auth(Role.ADMIN)
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateClinicalRecordDto: UpdateClinicalRecordDto,
+  ) {
+    const updateResponse = await this.clinicalRecordsService.update(
+      id,
+      updateClinicalRecordDto,
+    );
+
+    return {
+      message: 'Clinical record updated successfully',
+      userMessage: 'Historia Clínica actualizada correctamente',
+      data: updateResponse,
+    };
   }
 }

@@ -116,4 +116,30 @@ export class ClinicalRecordsService {
 
     return clinicalRecord;
   }
+
+  async update(
+    id: string,
+    updateData: Partial<ClinicalRecord>,
+  ): Promise<ClinicalRecord> {
+    const clinicalRecord = await this.clinicalRecordsRepository.findOne({
+      where: { id },
+    });
+
+    if (!clinicalRecord) {
+      throw new Error('Clinical Record not found');
+    }
+
+    // Remove fields that shouldn't be updated
+    delete updateData.id;
+    delete updateData.cr_number;
+    delete updateData.patient;
+
+    // Merge the updated data with existing record
+    const updatedRecord = this.clinicalRecordsRepository.merge(
+      clinicalRecord,
+      updateData,
+    );
+
+    return await this.clinicalRecordsRepository.save(updatedRecord);
+  }
 }

@@ -71,11 +71,7 @@ export class AppointmentsController {
   @Auth(Role.ADMIN)
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const appointment = await this.appointmentsService.findOne(id);
-    return {
-      message: 'Appointment retrieved successfully',
-      data: appointment,
-    };
+    return await this.appointmentsService.findOne(id);
   }
 
   @Patch(':id')
@@ -91,6 +87,7 @@ export class AppointmentsController {
     );
     return {
       message: 'Appointment successfully updated',
+      userMessage: 'Atención actualizada correctamente',
       data: updatedAppointment,
     };
   }
