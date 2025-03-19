@@ -11,13 +11,14 @@ import { AppointmentCie10 } from './appointments-cie.entity';
 import { AppointmentPrescriptions } from './appointments-prescriptions.entity';
 import { ClinicalRecord } from './clinical-records.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Transform } from 'class-transformer';
 
 @Entity('appointments')
 export class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   timestamp: Date;
 
   @Column()

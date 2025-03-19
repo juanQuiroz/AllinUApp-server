@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
 import { SharedModule } from './shared/shared.module';
+import { PsycoModule } from './psyco/psyco.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SharedModule } from './shared/shared.module';
     AuthModule,
     HealthModule,
     SharedModule,
+    PsycoModule,
   ],
   controllers: [],
   providers: [],

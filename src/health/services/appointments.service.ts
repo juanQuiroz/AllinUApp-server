@@ -119,18 +119,10 @@ export class AppointmentsService {
       throw new NotFoundException(`Appointment with ID ${id} not found`);
     }
 
+    console.log(appointment);
+
     return appointment;
   }
-
-  // async update(
-  //   id: string,
-  //   updateAppointmentDto: UpdateAppointmentDto,
-  // ): Promise<Appointment> {
-  //   const appointment = await this.findOne(id);
-
-  //   Object.assign(appointment, updateAppointmentDto);
-  //   return await this.appointmentsRepository.save(appointment);
-  // }
 
   async update(
     id: string,

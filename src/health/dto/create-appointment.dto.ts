@@ -15,7 +15,7 @@ export class CreateAppointmentDto {
   @IsUUID()
   id: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn()
   timestamp: Date;
 
   @IsString()

@@ -3,3 +3,8 @@ export enum patientType {
   ADMINSTAFF = 'adminStaff',
   OUTPATIENT = 'outPatient',
 }
+
+export enum patientTypePsyco {
+  STUDENT = 'student',
+  ADMINSTAFF = 'adminStaff',
+}
