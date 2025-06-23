@@ -86,6 +86,37 @@ export class CreateClinicalRecordDto {
   @IsNumber()
   af_numberOfSiblings: number;
 
+  @IsNumber()
+  ago_startMenarche: number;
+
+  @IsOptional()
+  @IsString()
+  ago_rhythm?: string;
+
+  @IsBoolean()
+  ago_useContraceptiveMethod: boolean;
+
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
+  ago_contraceptiveMethodName: string;
+
+  @IsOptional()
+  @IsNumber()
+  ago_g?: number;
+
+  @IsOptional()
+  @IsNumber()
+  ago_p?: number;
+
+  @IsOptional()
+  @IsNumber()
+  ago_a?: number;
+
+  @IsOptional()
+  @IsNumber()
+  ago_c?: number;
+
   @IsUUID()
   patientId: string;
 

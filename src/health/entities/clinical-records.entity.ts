@@ -8,6 +8,8 @@ import {
 import { Appointment } from './appointments.entity';
 import { Patient } from './patient.entity';
 import { PhysicalExam } from './physical-exam.entity';
+import { rhythmType } from 'src/common/enums/rhythmType.enum';
+import { IsEnum } from 'class-validator';
 
 @Entity('clinical_records')
 export class ClinicalRecord {
@@ -64,6 +66,37 @@ export class ClinicalRecord {
 
   @Column({ type: 'int', nullable: true })
   af_numberOfSiblings: number;
+
+  @Column({ type: 'int', nullable: true })
+  ago_startMenarche?: number; // inicio de la menstruacion
+
+  @Column({
+    type: 'enum',
+    enum: rhythmType,
+    nullable: true,
+  })
+  @IsEnum(rhythmType, {
+    message: 'ago_rhythm must be "regular" or "irregular"',
+  })
+  ago_rhythm?: string;
+
+  @Column({ type: 'boolean', nullable: true })
+  ago_useContraceptiveMethod: boolean; // uso de metodos anticonceptivos
+
+  @Column({ type: 'text', nullable: true })
+  ago_contraceptiveMethodName?: string;
+
+  @Column({ type: 'int', nullable: true })
+  ago_g?: number;
+
+  @Column({ type: 'int', nullable: true })
+  ago_p?: number;
+
+  @Column({ type: 'int', nullable: true })
+  ago_a?: number;
+
+  @Column({ type: 'int', nullable: true })
+  ago_c?: number;
 
   @ManyToOne(() => Patient, (patient) => patient.clinicalRecords)
   patient: Patient;
