@@ -25,15 +25,37 @@ export class ClinicalRecordsService {
     const { patientId, physicalExamId, ...clinicalRecordData } =
       createClinicalRecordDto;
 
+    // Incluir las relaciones para obtener el docId
     const patient = await this.patientRepository.findOne({
       where: { id: patientId },
+      relations: ['student', 'adminStaff', 'outPatient'],
     });
 
     if (!patient) {
       throw new Error('Patient not found');
     }
 
-    // Verify optional
+    // Obtener el docId según el tipo de paciente
+    let docId: string | undefined;
+    switch (patient.type) {
+      case 'student':
+        docId = patient.student?.docId;
+        break;
+      case 'adminStaff':
+        docId = patient.adminStaff?.docId;
+        break;
+      case 'outPatient':
+        docId = patient.outPatient?.docId;
+        break;
+      default:
+        docId = undefined;
+    }
+
+    if (!docId) {
+      throw new Error('No se encontró el DNI (docId) del paciente');
+    }
+
+    // Verificar examen físico opcional
     let physicalExam: PhysicalExam | undefined = undefined;
     if (physicalExamId) {
       physicalExam = await this.physicalExamRepository.findOne({
@@ -45,40 +67,8 @@ export class ClinicalRecordsService {
       }
     }
 
-    const currentYear = new Date().getFullYear(); // Año actual
-    const currentMonth = (new Date().getMonth() + 1)
-      .toString()
-      .padStart(2, '0'); // Mes actual en formato 'MM'
-
-    // Obtener el último registro basado en el año y el mes actuales
-    const lastRecord = await this.clinicalRecordsRepository
-      .createQueryBuilder('clinical_record')
-      .where('clinical_record.cr_number LIKE :pattern', {
-        pattern: `HC${currentYear}${currentMonth}%`,
-      })
-      .orderBy('clinical_record.cr_number', 'DESC')
-      .getOne();
-
-    let nextNumber: number;
-
-    if (lastRecord) {
-      // Usar regex para extraer la última parte numérica
-      const match = lastRecord.cr_number.match(/HC\d{4}\d{2}(\d{3})$/);
-      if (match) {
-        const lastNumber = parseInt(match[1], 10); // Convertir a número
-        nextNumber = lastNumber + 1; // Incrementar
-      } else {
-        // Si no coincide con el formato esperado
-        throw new Error(
-          `Formato inesperado en cr_number: ${lastRecord.cr_number}`,
-        );
-      }
-    } else {
-      nextNumber = 1; // No hay registros, iniciar en 1
-    }
-
-    // Formatear el próximo `cr_number` sin guiones
-    const nextCrNumber = `HC${currentYear}${currentMonth}${nextNumber.toString().padStart(3, '0')}`;
+    // Formatear el cr_number como HC={dni}
+    const nextCrNumber = `HC${docId}`;
 
     const clinicalRecord = this.clinicalRecordsRepository.create({
       ...clinicalRecordData,

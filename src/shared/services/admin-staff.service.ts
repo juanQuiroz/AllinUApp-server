@@ -10,12 +10,15 @@ import { CreateAdminStaffDto } from '../dto/create-adminStaff.dto';
 import { UpdateAdminStaffDto } from '../dto/update-adminStaff.dto';
 import * as XLSX from 'xlsx';
 import { DateTime } from 'luxon';
+import { PatientsService } from 'src/health/services/patients.service';
+import { Patient } from 'src/health/entities/patient.entity';
 
 @Injectable()
 export class AdminStaffService {
   constructor(
     @InjectRepository(AdminStaff)
     private readonly adminStaffRepository: Repository<AdminStaff>,
+    private readonly patientsService: PatientsService,
   ) {}
 
   async createManyFromExcel(fileBuffer: Buffer): Promise<AdminStaff[]> {
@@ -57,7 +60,7 @@ export class AdminStaffService {
         );
       }
     }
-    // Crear y guardar el estudiante
+   
     const newStudent = this.adminStaffRepository.create(createAdminStaffDto);
     return await this.adminStaffRepository.save(newStudent);
   }
@@ -141,5 +144,36 @@ export class AdminStaffService {
 
     // Devolver null si no es cadena ni número
     return null;
+  }
+
+  /**
+   * Crea un nuevo administrativo y lo registra como paciente
+   * @param createAdminStaffDto Datos para crear el administrativo
+   * @returns El paciente creado
+   */
+  async createAndRegisterPatient(
+    createAdminStaffDto: CreateAdminStaffDto,
+  ): Promise<Patient> {
+    // Verificar duplicados por docId
+    if (createAdminStaffDto.docId) {
+      const existingByDocId = await this.adminStaffRepository.findOne({
+        where: { docId: createAdminStaffDto.docId },
+      });
+      if (existingByDocId) {
+        throw new BadRequestException(
+          `El documento de identidad ${createAdminStaffDto.docId} ya está registrado.`,
+        );
+      }
+    }
+    // Crear y guardar el administrativo
+    const newAdminStaff = this.adminStaffRepository.create(createAdminStaffDto);
+    const adminStaffCreated = await this.adminStaffRepository.save(newAdminStaff);
+
+    // Registrar como paciente
+    const patientCreated = await this.patientsService.create({
+      adminStaffId: adminStaffCreated.id,
+    });
+
+    return patientCreated;
   }
 }

@@ -37,4 +37,29 @@ export class Cie10Service {
   async findAll(): Promise<Cie10[]> {
     return this.cie10Repository.find();
   }
+
+  async findMostFrequentDiagnoses(limit: number = 10): Promise<any[]> {
+    const result = await this.cie10Repository
+      .createQueryBuilder('cie10')
+      .leftJoin('cie10.appointmentCie10', 'appointmentCie10')
+      .select([
+        'cie10.id',
+        'cie10.code',
+        'cie10.description',
+        'COUNT(appointmentCie10.id) as frequency'
+      ])
+      .groupBy('cie10.id')
+      .addGroupBy('cie10.code')
+      .addGroupBy('cie10.description')
+      .orderBy('frequency', 'DESC')
+      .limit(limit)
+      .getRawMany();
+
+    return result.map(item => ({
+      id: item.cie10_id,
+      code: item.cie10_code,
+      description: item.cie10_description,
+      frequency: parseInt(item.frequency)
+    }));
+  }
 }

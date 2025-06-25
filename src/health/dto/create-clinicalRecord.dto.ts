@@ -94,6 +94,7 @@ export class CreateClinicalRecordDto {
   ago_rhythm?: string;
 
   @IsBoolean()
+  @IsOptional()
   ago_useContraceptiveMethod: boolean;
 
   @IsOptional()

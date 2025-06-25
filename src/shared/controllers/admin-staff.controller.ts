@@ -25,6 +25,21 @@ export class AdminStaffController {
     return this.adminStaffService.create(createAdminStaffDto);
   }
 
+  @Post('createAndRegisterAdminStaffPatient')
+  async createAndRegisterPatient(
+    @Body() createOutPatientDto: CreateAdminStaffDto,
+  ) {
+    const adminStaff =
+      await this.adminStaffService.createAndRegisterPatient(
+        createOutPatientDto,
+      );
+
+    return {
+      message: ` ${adminStaff.type == "TEACHER" ? 'Docente' : 'Personal administrativo'} creado exitosamente.`,
+      data: adminStaff,
+    };
+  }
+
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {

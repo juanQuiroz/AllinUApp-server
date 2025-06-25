@@ -1,4 +1,5 @@
 import { IsEnum, Matches } from 'class-validator';
+import { AdminStaffType } from 'src/common/enums/AdminStaffType.enum';
 import { Gender } from 'src/common/enums/gender.enum';
 import { Patient } from 'src/health/entities/patient.entity';
 import {
@@ -13,6 +14,14 @@ import {
 export class AdminStaff {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({
+    type: 'enum',
+    enum: AdminStaffType,
+    nullable: true,
+  })
+  @IsEnum(Gender, { message: 'type must be only "TEACHER" or "ADMINPERSONNEL"' })
+  type: string;
 
   @Column()
   firstName: string;

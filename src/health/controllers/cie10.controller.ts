@@ -6,6 +6,7 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Cie10Service } from '../services/cie10.service';
@@ -42,6 +43,17 @@ export class Cie10Controller {
     return {
       message: 'Cie10 list retrieved successfully',
       data: cie10,
+    };
+  }
+
+  @Get('most-frequent-diagnoses')
+  @HttpCode(HttpStatus.OK)
+  async findMostFrequentDiagnoses(@Query('limit') limit?: string) {
+    const limitNumber = limit ? parseInt(limit) : 10;
+    const diagnoses = await this.cie10Service.findMostFrequentDiagnoses(limitNumber);
+    return {
+      message: 'Most frequent CIE10 diagnoses retrieved successfully',
+      data: diagnoses,
     };
   }
 }

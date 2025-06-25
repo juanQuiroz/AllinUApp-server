@@ -6,6 +6,10 @@ export class CreateAdminStaffDto {
 
   @IsString()
   @Transform(({ value }) => value.trim())
+  type: string;
+
+  @IsString()
+  @Transform(({ value }) => value.trim())
   firstName: string;
 
   @IsString()
